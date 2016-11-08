@@ -16,11 +16,12 @@ then you can finaly unplug and replug youre arduino and it will do what you aske
 
 ## Provided functions
 
-void kb_init(); -> initialize the library
-void error(); -> if there is an error you shouldnt use this function
-void releaseKey();  -> release all of the keys on the keyboard
+void kb_init(); -> initialize the library<br />
+void error(); -> if there is an error you shouldnt use this function<br />
+void releaseKey();  -> release all of the keys on the keyboard<br />
 void writeKey(int lettr, int hold, int attr); -> write a key to the screen you can have a hold or even an attribute like shit
-void printKey(char str[BUFSIZ]);  -> print a screen on the string
+<br />
+void printKey(char str[BUFSIZ]);  -> print a screen on the string <br />
 
 ##all of the provided macros
 <a href="https://raw.githubusercontent.com/p4p1/kb_arduino_lib/master/keys.h">view this file</a>
