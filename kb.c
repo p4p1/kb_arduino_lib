@@ -16,6 +16,12 @@
 #include "keys.h"
 #define BUFSIZ 1024
 
+void kb_init();
+void error();
+void releaseKey();
+void writeKey(int lettr, int hold, int attr);
+void printKey(char str[BUFSIZ]);
+
 uint8_t key[8] = {
 	0 };
 
@@ -25,6 +31,11 @@ void kb_init()
 {
 	Serial.begin(9600);
 	delay(200);
+}
+
+void error()
+{
+ printKey("ERROR : This letter is not supported");
 }
 
 void releaseKey()
@@ -76,6 +87,14 @@ void printKey(char str[BUFSIZ])
 			} else {
 				writeKey(temp, 0, 0);
 			}
-    }
+    } else if(str[i] == 32) {
+			temp = KB_SPACE;
+			writeKey(temp, 0, 0);
+		} else if( (65 <= str[i]) && (str[i] <= 90)) {
+			temp = str[i] - 61;
+			writeKey(temp, 0, SHIFT);
+		} else {
+			error();
+		}
 	}
 }
