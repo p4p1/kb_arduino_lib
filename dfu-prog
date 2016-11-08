@@ -1,0 +1,35 @@
+#!/bin/bash
+
+FILE=$1
+E_NOROOT=-1
+E_NOFILE=-1
+E_NOARDUINO=-1
+ARDUNO_PATH=/dev/ttyACM0
+pluged="IN"
+
+if [[ $EUID -ne "0" ]]; then
+	echo "[ Err ] Not root"
+	exit $E_NOROOT
+fi
+
+if [[ ! -e "$FILE" ]]; then
+	echo "[ Err ] File not found!"
+	exit $E_NOFILE
+fi
+
+#if [[ ! -e "$ARDUNO_PATH" ]]; then
+#	echo "[ Err ] No arduino uno found"
+#	exit $E_NOARDUINO
+#fi
+
+dfu-programmer atmega16u2 erase
+dfu-programmer atmega16u2 flash --debug 1 $FILE
+dfu-programmer atmega16u2 reset
+
+echo "[ Ok ] Operation Succesfull :) .hex file uploaded"
+echo "[ .. ] You have succesfull uploaded"
+echo "[ .. ] a new firmware on youre arduino uno"
+echo "[ .. ] You now have to unplug/replug youre arduino"
+read
+
+exit
