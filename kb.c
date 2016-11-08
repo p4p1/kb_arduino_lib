@@ -15,7 +15,9 @@
 
 #include "keys.h"
 #define BUFSIZ 1024
-#define DELAY_TIME 200
+#define DELAY delay(200)
+#define GUI writeKey(WINDOWS, 0, 0)
+
 
 void kb_init();
 void error();
@@ -23,14 +25,20 @@ void releaseKey();
 void writeKey(int lettr, int hold, int attr);
 void printKey(char str[BUFSIZ]);
 
-uint8_t key[8] = {
-	0 };
-
+uint8_t key[8] = { 0 };
+const int resetPin = 7;
+int buttonState = 0;
 enum { HOLD = 1, DONT_HOLD = 0 };
 
 void kb_init()
 {
 	Serial.begin(9600);
+	pinMode(resetPin, INPUT);
+	digitalWrite(resetPin, 1);
+	buttonState = digitalRead(resetPin);
+	if(buttonState == LOW) {
+		delay(1000000000000000000);					// long delay
+	}
 	delay(200);
 }
 
@@ -69,7 +77,7 @@ void printKey(char str[BUFSIZ])
 			writeKey(temp, 0, 0);
 		} else if( (str[i] == 58) || (str[i] == 59) ) {		//[;]/[:]
 			temp = KB_SEMICOLON;
-			if( !(str[i] == 59) ){ // if :
+			if( !(str[i] == 59) ){ 
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
@@ -118,6 +126,9 @@ void printKey(char str[BUFSIZ])
 			} else {
 				writeKey(temp, 0, 0);
 			}
+		} else if(((str[i] >= 35) && (str[i] <= 37)) || (str[i] == 33)) {	//[!]/[#]/[$]/[%]
+			temp = str[i] - 3;
+			writeKey(temp, 0, SHIFT);
 		} else if(str[i] == 64){													//@
 			temp = KB_2;
 			writeKey(temp, 0, SHIFT);
@@ -127,6 +138,48 @@ void printKey(char str[BUFSIZ])
 		} else if(str[i] == 42) {													//*
 			temp = KB_8;
 			writeKey(temp, 0, SHIFT);
+		} else if((str[i] == 126) || (str[i] == 96)) {		//[`]/[~]
+			temp = KB_TILDA;
+			if(str[i] == 126) {
+				writeKey(temp, 0, SHIFT);
+			} else {
+				writeKey(temp, 0, 0);
+			}
+		} else if((str[i] == 47) || (str[i] == 63)) {			//[/]/[?]
+			temp = KB_FORWARD_SLASH;
+			if(str[i] == 63) {
+				writeKey(temp, 0, SHIFT);
+			} else {
+				writeKey(temp, 0, 0);
+			}
+		} else if ((str[i] == 44) || (str[i] == 60)) {		//[,]/[<]
+			temp = KB_COMA;
+			if(str[i] == 60) {
+				writeKey(temp, 0, SHIFT);
+			} else {
+				writeKey(temp, 0, 0);
+			}
+		} else if((str[i] == 39) || (str[i] == 34)) {			//[']/["]
+			temp = KB_QUOTE;
+			if(str[i] == 34) {
+				writeKey(temp, 0, SHIFT);
+			} else {
+				writeKey(temp, 0, 0);
+			}
+		} else if((str[i] == 45) || (str[i] == 95)) {			//[-]/[_]
+			temp = KB_DASH;
+			if(str[i] == 95) {
+				writeKey(temp, 0, SHIFT);
+			} else {
+				writeKey(temp, 0, 0);
+			}
+		} else if((str[i] == 61) || (str[i] == 43)) {			//[=]/[+]
+			temp = KB_EQUAL;
+			if(str[i] == 43) {
+				writeKey(temp, 0, SHIFT);
+			} else {
+				writeKey(temp, 0, 0);
+			}
 		} else {
 			error();
 		}
