@@ -15,6 +15,7 @@
 
 #include "keys.h"
 #define BUFSIZ 1024
+#define DELAY_TIME 200
 
 void kb_init();
 void error();
@@ -60,41 +61,75 @@ void printKey(char str[BUFSIZ])
 	int temp;
 	for( int i = 0; str[i] != '\0'; i++) {
 		temp = 0;
-    if((97 <= str[i]) && (str[i] <= 122)) {
-      temp = str[i] - 93;     //93
-      writeKey(temp, 0, 0);
-    } else if((49 <= str[i]) && (str[i]<= 57)) {  // 1 - 9
-      temp = str[i] - 19;
-      writeKey(temp, 0, 0);
-    } else if( (str[i] == 58) || (str[i] == 59) ) {
+		if((97 <= str[i]) && (str[i] <= 122)) {						//a-z
+			temp = str[i] - 93;
+			writeKey(temp, 0, 0);
+		} else if((49 <= str[i]) && (str[i]<= 57)) {  		//1-9
+			temp = str[i] - 19;
+			writeKey(temp, 0, 0);
+		} else if( (str[i] == 58) || (str[i] == 59) ) {		//[;]/[:]
 			temp = KB_SEMICOLON;
-      if( !(str[i] == 59) ){ // if :
-      	writeKey(temp, 0, SHIFT);
+			if( !(str[i] == 59) ){ // if :
+				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
 			}
-    } else if( (str[i] == 47) || (str[i] == 63)) {
-      temp = KB_FORWARD_SLASH;
+		} else if( (str[i] == 47) || (str[i] == 63)) {		//[/]/[?]
+			temp = KB_FORWARD_SLASH;
 			if(!(str[i] == 47)){
-      	writeKey(temp, 0, SHIFT);
+				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
 			}
-    } else if((str[i] == 46) || (str[i] == 62)) {
+		} else if((str[i] == 46) || (str[i] == 62)) {			//[dot]/[>]
 			temp = KB_DOT;
-      if(!(str[i] == 46)) {
-        writeKey(temp, 0, SHIFT);
+			if(!(str[i] == 46)) {
+				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
 			}
-    } else if(str[i] == 32) {
+		} else if(str[i] == 32) {													//[SPACE]
 			temp = KB_SPACE;
 			writeKey(temp, 0, 0);
-		} else if( (65 <= str[i]) && (str[i] <= 90)) {
+		} else if( (65 <= str[i]) && (str[i] <= 90)) {		//A-Z
 			temp = str[i] - 61;
+			writeKey(temp, 0, SHIFT);
+		} else if( (40 == str[i]) || (str[i] == 41) || (str[i] == 38)){	//( & )
+			temp = str[i] - 2;
+			writeKey(temp, 0, SHIFT);
+		} else if((str[i] == 91) || (str[i] == 123)) {		// [ / {
+			temp = KB_L_BRAC;
+			if(str[i] == 123){
+				writeKey(temp, 0, SHIFT);
+			} else {
+				writeKey(temp, 0, 0);
+			}
+		} else if ((str[i] == 93) || (str[i] == 125)){		// ] / }
+			temp = KB_R_BRAC;
+			if(str[i] == 125) {
+				writeKey(temp, 0, SHIFT);
+			} else {
+				writeKey(temp, 0, 0);
+			}
+		} else if((str[i] == 124) || (str[i] == 92)){			// [\] / [|]
+			temp = KB_BACKSLASH;
+			if(str[i] == 124) {
+				writeKey(temp, 0, SHIFT);
+			} else {
+				writeKey(temp, 0, 0);
+			}
+		} else if(str[i] == 64){													//@
+			temp = KB_2;
+			writeKey(temp, 0, SHIFT);
+		} else if(str[i] == 94) {													//^
+			temp = KB_6;
+			writeKey(temp, 0, SHIFT);
+		} else if(str[i] == 42) {													//*
+			temp = KB_8;
 			writeKey(temp, 0, SHIFT);
 		} else {
 			error();
 		}
 	}
+	delay(200);
 }
