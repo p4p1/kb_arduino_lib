@@ -23,4 +23,4 @@ void writeKey(int lettr, int hold, int attr); -> write a key to the screen you c
 void printKey(char str[BUFSIZ]);  -> print a screen on the string
 
 ##all of the provided macros
-<iframe src="https://raw.githubusercontent.com/p4p1/kb_arduino_lib/master/keys.h"></iframe>
+<a href="https://raw.githubusercontent.com/p4p1/kb_arduino_lib/master/keys.h">view this file</a>
