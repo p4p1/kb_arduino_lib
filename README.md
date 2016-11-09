@@ -1,27 +1,10 @@
 # kb_arduino_lib
 ##How To:
-Arduino keyboard library for arduino uno :) To use this it is pretty straight forward. You first have to download this
-repository then, you need to flash on youre arduino the
-<a href="https://raw.githubusercontent.com/p4p1/kb_arduino_lib/master/firmware/Arduino-usbserial-uno.hex">
-Arduino-usbserial-uno.hex</a> file its so that you can upload the scripts on youre arduino. To flash it you have to put you're
-arduino in DFU mode. to do that its verry simple. Just replicate this image on you're board with the black cable just touching
-the board for about 1 second and follow the instruction of dfu-prog script provided, use it to flash the firmware if you are
-new or a bit lost.<br />
-<img src="https://raw.githubusercontent.com/p4p1/kb_arduino_lib/master/images/IMG_0099.jpg"><br />
-After you fully uploaded the firmware on the arduino (for an intel i5 computer it takes over 1 or 2 second)you can now go into
-uploading you're program, we will use a test program that is given inside of the example folder.<br />
-<img src="https://raw.githubusercontent.com/p4p1/kb_arduino_lib/master/images/program.png"><br />
-After you uploaded using the official arduino IDE then flash the arduino with the <a href="#">keyboard firmware</a> provided
-then you can finaly unplug and replug youre arduino and it will do what you asked him to do as a keyboard.<br />
+To use this file you will need to have an arduino uno compatible board, 2 wires, and the upload cable. <br />
+<img src="" /><br />
+To start off this tutorial you need to know a few things, they will be covered in this tutorial but if you know them ill indicate
+if you can skip this part :). You need to put you're arduino in DFU-mode and you need to know how to install a library in the
+arduino ide. Basicly this tutorial with cover those two parts and then it will explain the basic syntax.<br />
+###How to install
 
-## Provided functions
-
-void kb_init(); -> initialize the library<br />
-void error(); -> if there is an error you shouldnt use this function<br />
-void releaseKey();  -> release all of the keys on the keyboard<br />
-void writeKey(int lettr, int hold, int attr); -> write a key to the screen you can have a hold or even an attribute like shit
-<br />
-void printKey(char str[BUFSIZ]);  -> print a screen on the string <br />
-
-##all of the provided macros
-<a href="https://raw.githubusercontent.com/p4p1/kb_arduino_lib/master/keys.h">view this file</a>
+###How to code ;)
