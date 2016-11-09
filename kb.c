@@ -13,23 +13,25 @@
  * Keyboard programs for arduino :P
  */
 
-#include "keys.h"
-#define BUFSIZ 1024
-#define DELAY delay(200)
-#define GUI writeKey(WINDOWS, 0, 0)
 
+#if defined(ARDUINO) && ARDUINO >= 100
+	#include "Arduino.h"
+#else
+	#include "WProgram.h"
+#endif
 
-void kb_init();
-void error();
-void releaseKey();
-void writeKey(int lettr, int hold, int attr);
-void printKey(char str[BUFSIZ]);
+#include "keys.h"													// Include all of the key macro
+#include "kb.h"
+#define BUFSIZ 1024												// Set the maximum buffer size to 1024
 
-uint8_t key[8] = { 0 };
-const int resetPin = 7;
-int buttonState = 0;
-enum { HOLD = 1, DONT_HOLD = 0 };
+uint8_t key[8] = { 0 };										// Keyboard buffer that will be sent to the target
+const int resetPin = 7;										// Reset button pin to prevent further execution
+int buttonState = 0;											// State of the reset button pin
+enum { HOLD = 1, DONT_HOLD = 0 };					// Small enum to make the syntax easier if you want youre program to hold a key
 
+/* Initialize the library, and set the reset pin
+ * and setup the pause option.
+ */
 void kb_init()
 {
 	Serial.begin(9600);
@@ -37,16 +39,21 @@ void kb_init()
 	digitalWrite(resetPin, 1);
 	buttonState = digitalRead(resetPin);
 	if(buttonState == LOW) {
-		delay(1000000000000000000);					// long delay
+		delay(1000000000000000000);
 	}
 	delay(200);
 }
 
+/* Print an error message to the keyboard to catch errors
+ * easly.
+ */
 void error()
 {
  printKey("ERROR : This letter is not supported");
 }
 
+/* A function to reset all of the keys.
+ */
 void releaseKey()
 {
 	key[0] = 0;
@@ -55,6 +62,9 @@ void releaseKey()
 	Serial.write(key, 8);
 }
 
+/* a function to press a key on the keyboard
+ * and write them up on the screen.
+ */
 void writeKey(int lettr, int hold, int attr)
 {
 	key[4] = lettr;
@@ -64,10 +74,13 @@ void writeKey(int lettr, int hold, int attr)
 		releaseKey();
 }
 
+/* Type a string out.
+ */
 void printKey(char str[BUFSIZ])
 {
 	int temp;
-	for( int i = 0; str[i] != '\0'; i++) {
+	int i;
+	for( i = 0; str[i] != '\0'; i++) {
 		temp = 0;
 		if((97 <= str[i]) && (str[i] <= 122)) {						//a-z
 			temp = str[i] - 93;
