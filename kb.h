@@ -6,7 +6,8 @@
 #define BUFSIZ 1024                       // Set the maximum buffer size to 1024
 #define DELAY delay(500)                  // Create a delay macro that is 500 miliseconds long
 #define GUI writeKey(WINDOWS, 0, 0)       // A macro that presses the GUI Key
-#define WIN_R writeKey(KB_R, 0, WINDOWS); // A windows keys + r combo to open the RUN prompt in windows
+#define ENTER writeKet(KB_ENTER, 0, 0)    // A macro that presses enter
+#define WIN_R writeKey(KB_R, 0, WINDOWS) // A windows keys + r combo to open the RUN prompt in windows
 
 
 void kb_init();
