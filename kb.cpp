@@ -193,6 +193,9 @@ void printKey(char str[BUFSIZ])
 			} else {
 				writeKey(temp, 0, 0);
 			}
+		} else if(str[i] == 48) {
+			temp = KB_0;
+			writeKey(temp, 0, 0);
 		} else {
 			error();
 		}
