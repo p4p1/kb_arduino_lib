@@ -92,3 +92,4 @@
 #define CTRL 224
 #define ALT 226
 #define SHIFT 225
+#define ESC 41

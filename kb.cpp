@@ -39,7 +39,7 @@ void kb_init()
 	digitalWrite(resetPin, 1);
 	buttonState = digitalRead(resetPin);
 	if(buttonState == LOW) {
-		delay(1000000000000000000);
+		delay(10000000);
 	}
 	delay(200);
 }
@@ -49,7 +49,7 @@ void kb_init()
  */
 void error()
 {
- printKey("ERROR : This letter is not supported");
+	printKey("ERROR : This letter is not supported");
 }
 
 /* A function to reset all of the keys.
@@ -91,6 +91,7 @@ void printKey(char str[BUFSIZ])
 		} else if( (str[i] == 58) || (str[i] == 59) ) {		//[;]/[:]
 			temp = KB_SEMICOLON;
 			if( !(str[i] == 59) ){ 
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
@@ -98,6 +99,7 @@ void printKey(char str[BUFSIZ])
 		} else if( (str[i] == 47) || (str[i] == 63)) {		//[/]/[?]
 			temp = KB_FORWARD_SLASH;
 			if(!(str[i] == 47)){
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
@@ -105,6 +107,7 @@ void printKey(char str[BUFSIZ])
 		} else if((str[i] == 46) || (str[i] == 62)) {			//[dot]/[>]
 			temp = KB_DOT;
 			if(!(str[i] == 46)) {
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
@@ -114,13 +117,16 @@ void printKey(char str[BUFSIZ])
 			writeKey(temp, 0, 0);
 		} else if( (65 <= str[i]) && (str[i] <= 90)) {		//A-Z
 			temp = str[i] - 61;
+			writeKey(SHIFT, 1, 0);
 			writeKey(temp, 0, SHIFT);
 		} else if( (40 == str[i]) || (str[i] == 41) || (str[i] == 38)){	//( & )
 			temp = str[i] - 2;
+			writeKey(SHIFT, 1, 0);
 			writeKey(temp, 0, SHIFT);
 		} else if((str[i] == 91) || (str[i] == 123)) {		// [ / {
 			temp = KB_L_BRAC;
 			if(str[i] == 123){
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
@@ -128,6 +134,7 @@ void printKey(char str[BUFSIZ])
 		} else if ((str[i] == 93) || (str[i] == 125)){		// ] / }
 			temp = KB_R_BRAC;
 			if(str[i] == 125) {
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
@@ -135,25 +142,31 @@ void printKey(char str[BUFSIZ])
 		} else if((str[i] == 124) || (str[i] == 92)){			// [\] / [|]
 			temp = KB_BACKSLASH;
 			if(str[i] == 124) {
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
 			}
 		} else if(((str[i] >= 35) && (str[i] <= 37)) || (str[i] == 33)) {	//[!]/[#]/[$]/[%]
 			temp = str[i] - 3;
+			writeKey(SHIFT, 1, 0);
 			writeKey(temp, 0, SHIFT);
 		} else if(str[i] == 64){													//@
 			temp = KB_2;
+			writeKey(SHIFT, 1, 0);
 			writeKey(temp, 0, SHIFT);
 		} else if(str[i] == 94) {													//^
 			temp = KB_6;
+			writeKey(SHIFT, 1, 0);
 			writeKey(temp, 0, SHIFT);
 		} else if(str[i] == 42) {													//*
 			temp = KB_8;
+			writeKey(SHIFT, 1, 0);
 			writeKey(temp, 0, SHIFT);
 		} else if((str[i] == 126) || (str[i] == 96)) {		//[`]/[~]
 			temp = KB_TILDA;
 			if(str[i] == 126) {
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
@@ -161,6 +174,7 @@ void printKey(char str[BUFSIZ])
 		} else if((str[i] == 47) || (str[i] == 63)) {			//[/]/[?]
 			temp = KB_FORWARD_SLASH;
 			if(str[i] == 63) {
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
@@ -168,6 +182,7 @@ void printKey(char str[BUFSIZ])
 		} else if ((str[i] == 44) || (str[i] == 60)) {		//[,]/[<]
 			temp = KB_COMA;
 			if(str[i] == 60) {
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
@@ -175,6 +190,7 @@ void printKey(char str[BUFSIZ])
 		} else if((str[i] == 39) || (str[i] == 34)) {			//[']/["]
 			temp = KB_QUOTE;
 			if(str[i] == 34) {
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
@@ -182,6 +198,7 @@ void printKey(char str[BUFSIZ])
 		} else if((str[i] == 45) || (str[i] == 95)) {			//[-]/[_]
 			temp = KB_DASH;
 			if(str[i] == 95) {
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
@@ -189,6 +206,7 @@ void printKey(char str[BUFSIZ])
 		} else if((str[i] == 61) || (str[i] == 43)) {			//[=]/[+]
 			temp = KB_EQUAL;
 			if(str[i] == 43) {
+				writeKey(SHIFT, 1, 0);
 				writeKey(temp, 0, SHIFT);
 			} else {
 				writeKey(temp, 0, 0);
