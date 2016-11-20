@@ -8,9 +8,9 @@ library in the arduino ide. Basicly this tutorial with cover those two parts and
 
 ###How to install
 To install and setup the arduino you need to install dfu-programmer:<br />
-+----------------------------------------+-------------------------------+<br />
++=====================================+=============================+<br />
 | sudo apt-get install dfu-programmer | brew install dfu-programmer |<br />
-+-----------------------------------------+------------------------------+<br />
++=====================================+=============================+<br />
 After installing the dfu-programmeryou need to setup youre arduino in DFU-mode. To do that on MY board you need to wire up
 those pins as seen on the picture below, just make the black cable touch slightly the middle pin and remove the orange one.
 <br />
