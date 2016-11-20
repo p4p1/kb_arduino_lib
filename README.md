@@ -23,9 +23,9 @@ Note that you should use the dfu-prog script to flash a script on you're arduino
 After flashing this firmware you can now upload a script to you're arduino. we will be using the scirpt given in the exemple
 folder. To do this simply opne up you're ide and open the scirpt. From now on you have to install the library, get the .zip
 file that is located in the master folder and in you're ide go to:<br />
-+=================================+<br />
++==================================+<br />
 | Sketch > Include Library > Add .Zip Library |<br />
-+=================================+<br />
++==================================+<br />
 After adding the library you can now code anything that you would like. After installing the library and uploading the sketch
 we are not yet finished you need to change the firmware again on you're arduino to
 <a href="">this one</a>
