@@ -25,12 +25,8 @@
 #define BUFSIZ 1024												// Set the maximum buffer size to 1024
 
 uint8_t key[8] = { 0 };										// Keyboard buffer that will be sent to the target
-#ifdef UNO_BOARD
 const int resetPin = 7;										// Reset button pin to prevent further execution
-#endif
-#ifdef LEONARDO_TEENSY_MICRO
 const int resetPin = 23;
-#endif
 int buttonState = 0;											// State of the reset button pin
 enum { HOLD = 1, DONT_HOLD = 0 };					// Small enum to make the syntax easier if you want youre program to hold a key
 int keyLanguage = 0;								//default is us
@@ -40,7 +36,6 @@ int keyLanguage = 0;								//default is us
  */
 void kb_init(int lang)
 {
-	#ifdef UNO_BOARD
 		Serial.begin(9600);
 		pinMode(resetPin, INPUT);
 		digitalWrite(resetPin, 1);
@@ -50,18 +45,6 @@ void kb_init(int lang)
 		}
 		keyLanguage = lang;
 		delay(200);
-	#endif
-	#ifdef LEONARDO_TEENSY_MICRO
-		pinMode(resetPin, INPUT);
-		digitalWrite(resetPin, 1);
-		buttonState = digitalRead(resetPin);
-		if(buttonState == LOW) {
-			delay(10000000);
-		}
-		keyLanguage = lang;
-		delay(200);
-	#endif
-
 }
 
 /* Print an error message to the keyboard to catch errors
