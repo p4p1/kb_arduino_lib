@@ -1,11 +1,9 @@
-#include <kb.h>
-#include <keys.h>
 
-#ifdef TEENSY
 
-#endif
+#ifndef WINDOWS_H
+#define WINDOWS_H
 
-#ifdef UNO
+
 #define GUI writeKey(WINDOWS, 0, 0)       // A macro that presses the GUI Key
 #define ENTER writeKey(KB_ENTER, 0, 0)    // A macro that presses enter
 
@@ -48,4 +46,6 @@
 		Serial.write(key, 8); \
 		delay(200); \
 		releaseKey()
+
+
 #endif

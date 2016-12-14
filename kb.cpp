@@ -19,13 +19,12 @@
 #else
 	#include "WProgram.h"
 #endif
-
-#include "keys.h"													// Include all of the key macro
+													// Include all of the key macro
 #include "kb.h"
 
 int buttonState = 0;											// State of the reset button pin
 int keyLanguage = 0;								//default is us
-
+uint8_t key[8] = { 0 };
 
 /* Initialize the library, and set the reset pin
  * and setup the pause option.
@@ -76,9 +75,9 @@ void error()
 int releaseKey()
 {
 	if(kb.board_type == UNO){
-		for(int i = 0 ; i < ; i++)
-			kb.key[i] = 0;
-		Serial.write(kb.key, 8);
+		for(int i = 0 ; i < 8; i++)
+			key[i] = 0;
+		Serial.write(key, 8);
 	} else if(kb.board_type == TEENSY) {
 		Keyboard.set_modifier(0);
 		Keyboard.set_key1(0);
@@ -120,10 +119,9 @@ int writeKey(long lettr, long attr, int hold)
  */
 int printKey(char str[BUFSIZ])
 {
-	int temp;
 	int i;
 
-	temp = i = 0;
+	i = 0;
 	if(kb.board_type == UNO){
 		for( i = 0; str[i] != '\0'; i++) {
 			if(keyLanguage == 0){

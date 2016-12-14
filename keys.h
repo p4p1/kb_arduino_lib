@@ -1,19 +1,21 @@
 /*
- * /$$   /$$                                  /$$      
- *| $$  /$$/                                 | $$      
- *| $$ /$$/   /$$$$$$  /$$   /$$  /$$$$$$$   | $$$$$$$ 
+ * /$$   /$$                                  /$$
+ *| $$  /$$/                                 | $$
+ *| $$ /$$/   /$$$$$$  /$$   /$$  /$$$$$$$   | $$$$$$$
  *| $$$$$/   /$$__  $$| $$  | $$ /$$_____/   | $$__  $$
  *| $$  $$  | $$$$$$$$| $$  | $$|  $$$$$$    | $$  \ $$
  *| $$\  $$ | $$_____/| $$  | $$ \____  $$   | $$  | $$
  *| $$ \  $$|  $$$$$$$|  $$$$$$$ /$$$$$$$//$$| $$  | $$
  *|__/  \__/ \_______/ \____  $$|_______/|__/|__/  |__/
- *                     /$$  | $$                       
- *                    |  $$$$$$/                       
- *                     \______/  
+ *                     /$$  | $$
+ *                    |  $$$$$$/
+ *                     \______/
  * Made by papi
  * The 7/11/2016
  * Last modified the 7/11/2016
  *****/
+#ifndef KEY_H
+#define KEY_h
 
 #define KB_ERROR_ROLL_OVER 1
 #define KB_POSTFail 2
@@ -25,7 +27,7 @@
 #define KB_E 8
 #define KB_F 9
 #define KB_G 10
-#define KB_H 11 
+#define KB_H 11
 #define KB_I 12
 #define KB_J 13
 #define KB_K 14
@@ -71,25 +73,27 @@
 #define KB_DOT 55
 #define KB_FORWARD_SLASH 56
 #define KB_CAPS_LOCK 57
-#define F1 58
-#define F2 59
-#define F3 60
-#define F4 61
-#define F5 62
-#define F6 63 
-#define F7 64
-#define F8 65 
-#define F9 66
-#define F10 67
-#define F11 68
-#define F12 69
+#define KB_F1 58
+#define KB_F2 59
+#define KB_F3 60
+#define KB_F4 61
+#define KB_F5 62
+#define KB_F6 63
+#define KB_F7 64
+#define KB_F8 65
+#define KB_F9 66
+#define KB_F10 67
+#define KB_F11 68
+#define KB_F12 69
 #define KB_PRINTSCREEN 70
 #define KB_R_ARROW 79
 #define KB_L_ARROW 80
 #define KB_D_ARROW 81
 #define KB_U_ARROW 82
 #define WINDOWS 227
-#define CTRL 224
-#define ALT 226
-#define SHIFT 225
-#define ESC 41
+#define KB_CTRL 224
+#define KB_ALT 226
+#define KB_SHIFT 225
+#define KB_ESC 41
+
+#endif
