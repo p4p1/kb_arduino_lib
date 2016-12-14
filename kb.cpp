@@ -22,29 +22,45 @@
 
 #include "keys.h"													// Include all of the key macro
 #include "kb.h"
-#define BUFSIZ 1024												// Set the maximum buffer size to 1024
 
-uint8_t key[8] = { 0 };										// Keyboard buffer that will be sent to the target
-const int resetPin = 7;										// Reset button pin to prevent further execution
-const int resetPin = 23;
 int buttonState = 0;											// State of the reset button pin
-enum { HOLD = 1, DONT_HOLD = 0 };					// Small enum to make the syntax easier if you want youre program to hold a key
 int keyLanguage = 0;								//default is us
+
 
 /* Initialize the library, and set the reset pin
  * and setup the pause option.
  */
-void kb_init(int lang)
+int kb_init(int b_type)
 {
+	if(b_type == UNO) {
+
+		kb.board_type = UNO;
+		kb.resetPin = 7;
+		kb.lang = KB_US;		// default keyboard language.
+		pinMode(kb.resetPin, INPUT);
+		digitalWrite(kb.resetPin, 1);
 		Serial.begin(9600);
-		pinMode(resetPin, INPUT);
-		digitalWrite(resetPin, 1);
-		buttonState = digitalRead(resetPin);
-		if(buttonState == LOW) {
-			delay(10000000);
-		}
-		keyLanguage = lang;
-		delay(200);
+
+	} else if (b_type == TEENSY) {
+
+		kb.board_type = TEENSY;
+		kb.resetPin = 23;
+		kb.lang = KB_US;		// default keyboard language.
+		pinMode(kb.resetPin, INPUT);
+		digitalWrite(kb.resetPin, 1);
+
+	} else {
+
+		return -1;
+
+	}
+
+	if(digitalRead(kb.resetPin) == LOW) {
+		pauseScript();
+	}
+
+	delay(200);
+	return 1;
 }
 
 /* Print an error message to the keyboard to catch errors
@@ -57,62 +73,93 @@ void error()
 
 /* A function to reset all of the keys.
  */
-void releaseKey()
+int releaseKey()
 {
-	for(int i = 0 ; i < ; i++)
-		key[i] = 0;
-	Serial.write(key, 8);
+	if(kb.board_type == UNO){
+		for(int i = 0 ; i < ; i++)
+			kb.key[i] = 0;
+		Serial.write(kb.key, 8);
+	} else if(kb.board_type == TEENSY) {
+		Keyboard.set_modifier(0);
+		Keyboard.set_key1(0);
+		Keyboard.set_key2(0);
+		Keyboard.set_key3(0);
+		Keyboard.set_key4(0);
+		Keyboard.set_key5(0);
+		Keyboard.send_now();
+	} else {
+		return -1;
+	}
+
+	return 0;
 }
 
 /* a function to press a key on the keyboard
  * and write them up on the screen.
  */
-void writeKey(int lettr, int hold, int attr)
+int writeKey(long lettr, long attr, int hold)
 {
-	key[4] = lettr;
-	key[2] = attr;
-	Serial.write(key, 8);
+	if(kb.board_type == UNO){
+		key[4] = lettr;
+		key[2] = attr;
+		Serial.write(key, 8);
+	} else if (kb.board_type == TEENSY) {
+		Keyboard.set_modifier(attr);
+		Keyboard.set_key1(lettr);
+		Keyboard.send_now();
+	} else {
+		return -1;
+	}
+
 	if(!(hold))
 		releaseKey();
+	return 0;
 }
 
 /* Type a string out.
  */
-void printKey(char str[BUFSIZ])
+int printKey(char str[BUFSIZ])
 {
 	int temp;
 	int i;
-	for( i = 0; str[i] != '\0'; i++) {
-		if(keyLanguage == 0){
-			kb_us(str[i]);
-		} else {
-			error();
+
+	temp = i = 0;
+	if(kb.board_type == UNO){
+		for( i = 0; str[i] != '\0'; i++) {
+			if(keyLanguage == 0){
+				kb_us(str[i]);
+			} else {
+				error();
+			}
 		}
+	} else if(kb.board_type == TEENSY) {
+		Keyboard.print(str);
+	} else {
+		return -1;
 	}
+
 	delay(200);
+	return 0;
 }
 
-void resetKey()
+void ledBlinker(int inc)
 {
-
-	Keyboard.set_modifier(0);
-	Keyboard.set_key1(0);
-	Keyboard.send_now();
-
+  for(int i = 0; i < inc; i++){
+    digitalWrite(LED_BUILTIN, (i % 2)? LOW: HIGH);
+    delay(70);
+  }
 }
-void pressModifier(long mod)
+
+void pauseScript()
 {
+	ledBlinker(1);
+        while(1) {
 
-	Keyboard.set_modifier(mod);
-	Keyboard.send_now();
+          delay(1);
+          if(digitalRead(kb.resetPin) != HIGH){
+            break;
+          }
 
-}
-void pressKey(long key)
-{
-
-	Keyboard.set_key1(key);
-	Keyboard.send_now();
-	Keyboard.set_key1(0);
-	Keyboard.send_now();
-	
+        }
+        ledBlinker(2);
 }
