@@ -20,10 +20,11 @@
 	#include "WProgram.h"
 #endif
 													// Include all of the key macro
-#include "kb.h"
+#include <kb.h>
 
 int buttonState = 0;											// State of the reset button pin
 int keyLanguage = 0;								//default is us
+
 uint8_t key[8] = { 0 };
 
 /* Initialize the library, and set the reset pin

@@ -1,13 +1,10 @@
-#ifndef kb_h
-#define kb_h
+#ifndef KB_LIB
+#define KB_LIB
 
+#include "keys.h"
 
 #define BUFSIZ 1024                       // Set the maximum buffer size to 1024
 #define DELAY delay(500)                  // Create a delay macro that is 500 miliseconds long
-
-#include "keys.h"
-#include "windows.h"
-#include "mac.h"
 
 enum keyboardLanguage { KB_US=0, KB_FR=1, KB_ENG } klang;
 enum board { UNO = 10, TEENSY = 20 } board_type;
@@ -19,6 +16,8 @@ struct kb {
 	int hold;
 	int resetPin;
 } kb;
+
+
 
 int kb_init(int);
 int releaseKey();
