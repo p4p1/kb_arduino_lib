@@ -12,15 +12,14 @@
  *                     \______/
  * Keyboard programs for arduino :P
  */
-
+													// Include all of the key macro
+#include "kb.h"
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "Arduino.h"
 #else
 	#include "WProgram.h"
 #endif
-													// Include all of the key macro
-#include <kb.h>
 
 int buttonState = 0;											// State of the reset button pin
 int keyLanguage = 0;								//default is us
@@ -63,13 +62,6 @@ int kb_init(int b_type)
 	return 1;
 }
 
-/* Print an error message to the keyboard to catch errors
- * easly.
- */
-void error()
-{
-	printKey("ERROR : This letter is not supported");
-}
 
 /* A function to reset all of the keys.
  */
@@ -127,8 +119,6 @@ int printKey(char str[BUFSIZ])
 		for( i = 0; str[i] != '\0'; i++) {
 			if(keyLanguage == 0){
 				kb_us(str[i]);
-			} else {
-				error();
 			}
 		}
 	} else if(kb.board_type == TEENSY) {
@@ -144,7 +134,7 @@ int printKey(char str[BUFSIZ])
 void ledBlinker(int inc)
 {
   for(int i = 0; i < inc; i++){
-    digitalWrite(LED_BUILTIN, (i % 2)? LOW: HIGH);
+    digitalWrite(13, (i % 2)? LOW: HIGH);
     delay(70);
   }
 }
