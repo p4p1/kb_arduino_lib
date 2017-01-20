@@ -8,11 +8,9 @@
 #define GUI do { writeKey(KEY_LEFT_GUI, 0, 0); } while(0)
 
 enum kb_kang { KB_US=0, KB_FR=1, KB_ENG=2 };
-enum board { UNO = 10, TEENSY = 20 };
 enum HOLDER { HOLD = 1, DONT_HOLD = 0 };
 
 static struct kb {
-	int board_type;
 	int lang;
 	int hold;
 	int resetPin;
@@ -20,7 +18,7 @@ static struct kb {
 
 
 
-int kb_init(int);
+int kb_init();
 int releaseKey();
 
 int writeKey(long , long , int );

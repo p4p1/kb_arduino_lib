@@ -29,30 +29,28 @@ uint8_t key[8] = { 0 };
 /* Initialize the library, and set the reset pin
  * and setup the pause option.
  */
-int kb_init(int b_type)
+int kb_init()
 {
-	if(b_type == UNO) {
+	#if defined(ARDUINO)
 
-		kb.board_type = UNO;
 		kb.resetPin = 7;
 		kb.lang = KB_US;		// default keyboard language.
 		pinMode(kb.resetPin, INPUT);
 		digitalWrite(kb.resetPin, 1);
 		Serial.begin(9600);
+	#endif
+	#if defined(CORE_TEENSY)
 
-	} else if (b_type == TEENSY) {
-
-		kb.board_type = TEENSY;
 		kb.resetPin = 23;
 		kb.lang = KB_US;		// default keyboard language.
 		pinMode(kb.resetPin, INPUT);
 		digitalWrite(kb.resetPin, 1);
 
-	} else {
+	#else
 
 		return -1;
 
-	}
+	#endif
 
 	if(digitalRead(kb.resetPin) == LOW) {
 		pauseScript();
@@ -67,11 +65,12 @@ int kb_init(int b_type)
  */
 int releaseKey()
 {
-	if(kb.board_type == UNO){
+	#if defined(ARDUINO)
 		for(int i = 0 ; i < 8; i++)
 			key[i] = 0;
 		Serial.write(key, 8);
-	} else if(kb.board_type == TEENSY) {
+	#endif
+	#if defined(CORE_TEENSY)
 		Keyboard.set_modifier(0);
 		Keyboard.set_key1(0);
 		Keyboard.set_key2(0);
@@ -79,9 +78,9 @@ int releaseKey()
 		Keyboard.set_key4(0);
 		Keyboard.set_key5(0);
 		Keyboard.send_now();
-	} else {
+	#else
 		return -1;
-	}
+	#endif
 
 	return 0;
 }
@@ -91,17 +90,18 @@ int releaseKey()
  */
 int writeKey(long lettr, long attr, int hold)
 {
-	if(kb.board_type == UNO){
+	#if defined(ARDUINO)
 		key[4] = lettr;
 		key[2] = attr;
 		Serial.write(key, 8);
-	} else if (kb.board_type == TEENSY) {
+	#endif
+	#if defined(CORE_TEENSY)
 		Keyboard.set_modifier(attr);
 		Keyboard.set_key1(lettr);
 		Keyboard.send_now();
-	} else {
+	#else
 		return -1;
-	}
+	#endif
 
 	if(!(hold))
 		releaseKey();
@@ -115,17 +115,18 @@ int printKey(char str[BUFSIZ])
 	int i;
 
 	i = 0;
-	if(kb.board_type == UNO){
+	#if defined(ARDUINO)
 		for( i = 0; str[i] != '\0'; i++) {
 			if(keyLanguage == 0){
 				kb_us(str[i]);
 			}
 		}
-	} else if(kb.board_type == TEENSY) {
+	#endif
+	#if defined(CORE_TEENSY)
 		Keyboard.print(str);
-	} else {
+	#else
 		return -1;
-	}
+	#endif
 
 	delay(200);
 	return 0;
