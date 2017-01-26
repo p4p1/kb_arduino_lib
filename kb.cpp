@@ -43,12 +43,6 @@ int kb_init()
 	#endif
 	#if defined(CORE_TEENSY)
 
-<<<<<<< HEAD
-	#endif
-	#if defined(CORE_TEENSY)
-
-=======
->>>>>>> origin/master
 		kb.resetPin = 23;
 		kb.default_light = 13;
 		kb.lang = KB_US;		// default keyboard language.
@@ -142,11 +136,7 @@ int printKey(char str[BUFSIZ])
 void ledBlinker(int inc)
 {
   for(int i = 0; i < inc; i++){
-<<<<<<< HEAD
     digitalWrite(kb.default_light, (i % 2)? LOW: HIGH);
-=======
-    digitalWrite(13, (i % 2)? LOW: HIGH);
->>>>>>> origin/master
     delay(70);
   }
 }
