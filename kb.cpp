@@ -12,15 +12,14 @@
  *                     \______/
  * Keyboard programs for arduino :P
  */
-
+													// Include all of the key macro
+#include "kb.h"
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "Arduino.h"
 #else
 	#include "WProgram.h"
 #endif
-													// Include all of the key macro
-#include <kb.h>
 
 int buttonState = 0;											// State of the reset button pin
 int keyLanguage = 0;								//default is us
@@ -30,66 +29,59 @@ uint8_t key[8] = { 0 };
 /* Initialize the library, and set the reset pin
  * and setup the pause option.
  */
-int kb_init(int b_type)
+int kb_init()
 {
-	if(b_type == UNO) {
+	#if defined(ARDUINO)
 
-		kb.board_type = UNO;
 		kb.resetPin = 7;
 		kb.lang = KB_US;		// default keyboard language.
+		kb.default_light = 13;
+		pinMode(kb.default_light, OUTPUT);
 		pinMode(kb.resetPin, INPUT);
 		digitalWrite(kb.resetPin, 1);
 		Serial.begin(9600);
 
-	} else if (b_type == TEENSY) {
+	#endif
+	#if defined(CORE_TEENSY)
 
-		kb.board_type = TEENSY;
 		kb.resetPin = 23;
+		kb.default_light = 13;
 		kb.lang = KB_US;		// default keyboard language.
 		pinMode(kb.resetPin, INPUT);
+		pinMode(kb.default_light, OUTPUT);
 		digitalWrite(kb.resetPin, 1);
 
-	} else {
+	#else
 
 		return -1;
 
-	}
+	#endif
 
 	if(digitalRead(kb.resetPin) == LOW) {
 		pauseScript();
 	}
 
-	delay(200);
+	delay(500);
 	return 1;
 }
 
-/* Print an error message to the keyboard to catch errors
- * easly.
- */
-void error()
-{
-	printKey("ERROR : This letter is not supported");
-}
 
 /* A function to reset all of the keys.
  */
 int releaseKey()
 {
-	if(kb.board_type == UNO){
+	#if defined(ARDUINO)
 		for(int i = 0 ; i < 8; i++)
 			key[i] = 0;
 		Serial.write(key, 8);
-	} else if(kb.board_type == TEENSY) {
+	#endif
+	#if defined(CORE_TEENSY)
 		Keyboard.set_modifier(0);
 		Keyboard.set_key1(0);
-		Keyboard.set_key2(0);
-		Keyboard.set_key3(0);
-		Keyboard.set_key4(0);
-		Keyboard.set_key5(0);
 		Keyboard.send_now();
-	} else {
+	#else
 		return -1;
-	}
+	#endif
 
 	return 0;
 }
@@ -99,17 +91,19 @@ int releaseKey()
  */
 int writeKey(long lettr, long attr, int hold)
 {
-	if(kb.board_type == UNO){
+	#if defined(ARDUINO)
 		key[4] = lettr;
 		key[2] = attr;
 		Serial.write(key, 8);
-	} else if (kb.board_type == TEENSY) {
+	#endif
+	#if defined(CORE_TEENSY)
 		Keyboard.set_modifier(attr);
+		Keyboard.send_now();
 		Keyboard.set_key1(lettr);
 		Keyboard.send_now();
-	} else {
+	#else
 		return -1;
-	}
+	#endif
 
 	if(!(hold))
 		releaseKey();
@@ -123,19 +117,18 @@ int printKey(char str[BUFSIZ])
 	int i;
 
 	i = 0;
-	if(kb.board_type == UNO){
+	#if defined(ARDUINO)
 		for( i = 0; str[i] != '\0'; i++) {
 			if(keyLanguage == 0){
 				kb_us(str[i]);
-			} else {
-				error();
 			}
 		}
-	} else if(kb.board_type == TEENSY) {
+	#endif
+	#if defined(CORE_TEENSY)
 		Keyboard.print(str);
-	} else {
+	#else
 		return -1;
-	}
+	#endif
 
 	delay(200);
 	return 0;
@@ -144,7 +137,7 @@ int printKey(char str[BUFSIZ])
 void ledBlinker(int inc)
 {
   for(int i = 0; i < inc; i++){
-    digitalWrite(LED_BUILTIN, (i % 2)? LOW: HIGH);
+    digitalWrite(kb.default_light, (i % 2)? LOW: HIGH);
     delay(70);
   }
 }
@@ -152,13 +145,12 @@ void ledBlinker(int inc)
 void pauseScript()
 {
 	ledBlinker(1);
-        while(1) {
-
-          delay(1);
-          if(digitalRead(kb.resetPin) != HIGH){
-            break;
-          }
-
-        }
-        ledBlinker(2);
+	delay(1000);
+	while(1) {
+		delay(1);
+		if(digitalRead(kb.resetPin) != HIGH){
+			break;
+		}
+	}
+	ledBlinker(2);
 }

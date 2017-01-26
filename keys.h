@@ -90,7 +90,7 @@
 #define KB_L_ARROW 80
 #define KB_D_ARROW 81
 #define KB_U_ARROW 82
-#define WINDOWS 227
+#define KB_WINDOWS 227
 #define KB_CTRL 224
 #define KB_ALT 226
 #define KB_SHIFT 225
