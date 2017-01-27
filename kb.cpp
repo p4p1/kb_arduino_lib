@@ -31,16 +31,6 @@ uint8_t key[8] = { 0 };
  */
 int kb_init()
 {
-	#if defined(ARDUINO)
-
-		kb.resetPin = 7;
-		kb.lang = KB_US;		// default keyboard language.
-		kb.default_light = 13;
-		pinMode(kb.default_light, OUTPUT);
-		pinMode(kb.resetPin, INPUT);
-		digitalWrite(kb.resetPin, 1);
-		Serial.begin(9600);
-	#endif
 	#if defined(CORE_TEENSY)
 
 		kb.resetPin = 23;
@@ -49,6 +39,16 @@ int kb_init()
 		pinMode(kb.resetPin, INPUT);
 		pinMode(kb.default_light, OUTPUT);
 		digitalWrite(kb.resetPin, 1);
+
+	#elif defined(ARDUINO)
+
+		kb.resetPin = 7;
+		kb.lang = KB_US;		// default keyboard language.
+		kb.default_light = 13;
+		pinMode(kb.default_light, OUTPUT);
+		pinMode(kb.resetPin, INPUT);
+		digitalWrite(kb.resetPin, 1);
+		Serial.begin(9600);
 
 	#else
 
@@ -69,15 +69,14 @@ int kb_init()
  */
 int releaseKey()
 {
-	#if defined(ARDUINO)
-		for(int i = 0 ; i < 8; i++)
-			key[i] = 0;
-		Serial.write(key, 8);
-	#endif
 	#if defined(CORE_TEENSY)
 		Keyboard.set_modifier(0);
 		Keyboard.set_key1(0);
 		Keyboard.send_now();
+	#elif defined(ARDUINO)
+		for(int i = 0 ; i < 8; i++)
+			key[i] = 0;
+		Serial.write(key, 8);
 	#else
 		return -1;
 	#endif
@@ -90,16 +89,15 @@ int releaseKey()
  */
 int writeKey(long lettr, long attr, int hold)
 {
-	#if defined(ARDUINO)
-		key[4] = lettr;
-		key[2] = attr;
-		Serial.write(key, 8);
-	#endif
 	#if defined(CORE_TEENSY)
 		Keyboard.set_modifier(attr);
 		Keyboard.send_now();
 		Keyboard.set_key1(lettr);
 		Keyboard.send_now();
+	#elif defined(ARDUINO)
+		key[4] = lettr;
+		key[2] = attr;
+		Serial.write(key, 8);
 	#else
 		return -1;
 	#endif
@@ -116,15 +114,14 @@ int printKey(char str[BUFSIZ])
 	int i;
 
 	i = 0;
-	#if defined(ARDUINO)
+	#if defined(CORE_TEENSY)
+		Keyboard.print(str);
+	#elif defined(ARDUINO)
 		for( i = 0; str[i] != '\0'; i++) {
 			if(keyLanguage == 0){
 				kb_us(str[i]);
 			}
 		}
-	#endif
-	#if defined(CORE_TEENSY)
-		Keyboard.print(str);
 	#else
 		return -1;
 	#endif

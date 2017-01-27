@@ -4,8 +4,6 @@
 #include "keys.h"
 
 #define BUFSIZ 1024
-#define DELAY do { Delay(500); } while(0)
-#define GUI do { writeKey(KEY_LEFT_GUI, 0, 0); } while(0)
 
 enum kb_kang { KB_US=0, KB_FR=1, KB_ENG=2 };
 enum HOLDER { HOLD = 1, DONT_HOLD = 0 };
