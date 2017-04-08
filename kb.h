@@ -4,28 +4,20 @@
 #include "keys.h"
 
 #define BUFSIZ 1024
+#define DELAY delay(default_delay)
 
-enum kb_kang { KB_US=0, KB_FR=1, KB_ENG=2 };
-enum HOLDER { HOLD = 1, DONT_HOLD = 0 };
+enum {WINDOWS=1, LINUX=2, MAC=3};
 
-static struct kb {
-	int lang;
-	int hold;
-	int resetPin;
-	int default_light;
-} kb;
-
-
+const int reset_pin = 23;
+const int script_2_pin = 1;
+const int status_led = 13;
+static int default_delay = 500;
 
 int kb_init();
-int releaseKey();
-
-int writeKey(long , long , int );
-int printKey(char str[BUFSIZ]);
-
-void kb_us(char ch);
-
-void ledBlinker(int inc);
-void pauseScript();
+int print(char *);
+int key(int);
+int ctrl_key(int);
+int gui_key(int);
+int command_menu(int);
 
 #endif

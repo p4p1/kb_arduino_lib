@@ -21,132 +21,86 @@
 	#include "WProgram.h"
 #endif
 
-int buttonState = 0;											// State of the reset button pin
-int keyLanguage = 0;								//default is us
-
-uint8_t key[8] = { 0 };
-
-/* Initialize the library, and set the reset pin
- * and setup the pause option.
- */
 int kb_init()
 {
-	#if defined(CORE_TEENSY)
+    default_delay = 1000;
+    Keyboard.begin();
+    digitalWrite(reset_pin, 1); // define pull up on reset_pin
+    digitalWrite(script_2_pin, 1);  // define pull up on script_2_pin
+    digitalWrite(status_led, LOW);  // set led off before anything.
+    pinMode(reset_pin, INPUT);
+    pinMode(script_2_pin, INPUT);
+    pinMode(status_led, OUTPUT);
+    DELAY;
+    if(digitalRead(reset_pin) == LOW){
+        delay(99999999);
+    }
 
-		kb.resetPin = 23;
-		kb.default_light = 13;
-		kb.lang = KB_US;		// default keyboard language.
-		pinMode(kb.resetPin, INPUT);
-		pinMode(kb.default_light, OUTPUT);
-		digitalWrite(kb.resetPin, 1);
-
-	#elif defined(ARDUINO)
-
-		kb.resetPin = 7;
-		kb.lang = KB_US;		// default keyboard language.
-		kb.default_light = 13;
-		pinMode(kb.default_light, OUTPUT);
-		pinMode(kb.resetPin, INPUT);
-		digitalWrite(kb.resetPin, 1);
-		Serial.begin(9600);
-
-	#else
-
-		return -1;
-
-	#endif
-
-	if(digitalRead(kb.resetPin) == LOW) {
-		pauseScript();
-	}
-
-	delay(500);
-	return 1;
 }
 
-
-/* A function to reset all of the keys.
- */
-int releaseKey()
+int print(char *msg)
 {
-	#if defined(CORE_TEENSY)
-		Keyboard.set_modifier(0);
-		Keyboard.set_key1(0);
-		Keyboard.send_now();
-	#elif defined(ARDUINO)
-		for(int i = 0 ; i < 8; i++)
-			key[i] = 0;
-		Serial.write(key, 8);
-	#else
-		return -1;
-	#endif
-
-	return 0;
+  digitalWrite(status_led, HIGH);
+  Keyboard.print(msg);
+  delay(100);
+  digitalWrite(status_led, LOW);
+  return 0;
 }
 
-/* a function to press a key on the keyboard
- * and write them up on the screen.
- */
-int writeKey(long lettr, long attr, int hold)
+int key(int key)
 {
-	#if defined(CORE_TEENSY)
-		Keyboard.set_modifier(attr);
-		Keyboard.send_now();
-		Keyboard.set_key1(lettr);
-		Keyboard.send_now();
-	#elif defined(ARDUINO)
-		key[4] = lettr;
-		key[2] = attr;
-		Serial.write(key, 8);
-	#else
-		return -1;
-	#endif
-
-	if(!(hold))
-		releaseKey();
-	return 0;
+  digitalWrite(status_led, HIGH);
+  Keyboard.press(key);
+  delay(100);
+  digitalWrite(status_led, LOW);
+  Keyboard.releaseAll();
 }
 
-/* Type a string out.
- */
-int printKey(char str[BUFSIZ])
+int ctrl_key(int key)
 {
-	int i;
-
-	i = 0;
-	#if defined(CORE_TEENSY)
-		Keyboard.print(str);
-	#elif defined(ARDUINO)
-		for( i = 0; str[i] != '\0'; i++) {
-			if(keyLanguage == 0){
-				kb_us(str[i]);
-			}
-		}
-	#else
-		return -1;
-	#endif
-
-	delay(200);
-	return 0;
+  digitalWrite(status_led, HIGH);
+  Keyboard.press(KEY_LEFT_CTRL);
+  delay(50);
+  Keyboard.press(key);
+  delay(100);
+  Keyboard.releaseAll();
+  digitalWrite(status_led, LOW);
+  return 0;
 }
 
-void ledBlinker(int inc)
+int gui_key(int key)
 {
-  for(int i = 0; i < inc; i++){
-    digitalWrite(kb.default_light, (i % 2)? LOW: HIGH);
-    delay(70);
+  digitalWrite(status_led, HIGH);
+  Keyboard.press(KEY_LEFT_GUI);
+  delay(50);
+  Keyboard.press(key);
+  delay(100);
+  Keyboard.releaseAll();
+  digitalWrite(status_led, LOW);
+  return 0;
+}
+
+int alt_key(int key)
+{
+  digitalWrite(status_led, HIGH);
+  Keyboard.press(KEY_LEFT_ALT);
+  delay(50);
+  Keyboard.press(key);
+  delay(100);
+  Keyboard.releaseAll();
+  digitalWrite(status_led, LOW);
+  return 0;
+}
+
+int command_menu(int os)
+{
+  if(os == 1) {
+    gui_key('r');
+  } else if(os == 2) {
+    key(KEY_LEFT_GUI);
+  } else if(os == 3) {
+    gui_key(' ');
+  } else {
+    gui_key('r');
   }
-}
-
-void pauseScript()
-{
-	ledBlinker(1);
-	delay(1000);
-	while(1) {
-		delay(1);
-		if(digitalRead(kb.resetPin) != HIGH){
-			break;
-		}
-	}
-	ledBlinker(2);
 }
