@@ -13,6 +13,8 @@ const int script_2_pin = 1;
 const int status_led = 13;
 static int default_delay = 500;
 
+void uno_print(char ch);
+
 int kb_init();
 int print(char *);
 int key(int);
